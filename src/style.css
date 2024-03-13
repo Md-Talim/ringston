@@ -1,5 +1,116 @@
+@font-face {
+  font-family: "Geist";
+  src: url("/font/Geist-Light.woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/font/Geist-Bold.woff2");
+  font-weight: 700;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #fff url("/bg.svg");
+  font-family: "Geist", sans-serif;
+  height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.mask {
+  overflow: hidden;
+}
+
+/* Header */
+header {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+
+  a.logo {
+    font-size: 1.3rem;
+    color: #000000;
+  }
+
+  a.collection {
+    display: flex;
+    align-content: center;
+    gap: 0.5em;
+    color: #ffffff;
+  }
+}
+
+/* Hero Section / Main section */
+.hero {
+  height: 100vh;
+}
+
+main {
+  .left {
+    align-self: last baseline;
+    flex: 1;
+    height: 90vh;
+    display: flex;
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 11rem);
+      align-self: last baseline;
+      font-weight: 300;
+      margin: 0;
+    }
+  }
+
+  .right {
+    height: 100vh;
+    flex: 0.65;
+    display: none;
+    position: relative;
+    pointer-events: none;
+    overflow: hidden;
+
+    video {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-width: 100%;
+      min-height: 100%;
+      opacity: 1;
+    }
+
+    .vid-overlay {
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+      background: blue;
+    }
+  }
 }
