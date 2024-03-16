@@ -2,6 +2,7 @@ import * as dat from "dat.gui";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
+import SplitType from "split-type";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
@@ -23,7 +24,9 @@ function initThreeJS() {
   gui.hide();
 
   /**
-   * Sizes
+   * Window's size object
+   * @defaultValue `width` - `window.innerWidth`
+   * @defaultValue `height` - `window.innerHeight`
    */
   const sizes = {
     width: window.innerWidth,
@@ -98,6 +101,36 @@ function initThreeJS() {
   });
 }
 
+function animateWords() {
+  const words = ["Relationships", "Romance", "Rings"];
+  let index = 0;
+  const textElement = document.querySelector(".primary-h1 span");
+  let split: SplitType;
+
+  function animateChar(chars: HTMLElement[]) {
+    gsap.from(chars, {
+      yPercent: 100,
+      stagger: 0.03,
+      duration: 1.5,
+      ease: "power4.out",
+      onComplete: () => {
+        if (split) {
+          split.revert();
+        }
+      },
+    });
+  }
+
+  function updateText() {
+    textElement!!.textContent = words[index];
+    split = new SplitType(".primary-h1 span", { types: "chars" });
+    animateChar(split.chars!!);
+    index = (index + 1) % words.length;
+  }
+
+  setInterval(updateText, 3000);
+}
+
 function initRenderLoop() {
   const clock = new THREE.Clock();
 
@@ -126,4 +159,5 @@ function initRenderLoop() {
 document.addEventListener("DOMContentLoaded", () => {
   initThreeJS();
   initRenderLoop();
+  animateWords();
 });
