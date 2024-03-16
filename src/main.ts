@@ -1,12 +1,19 @@
-import "./style.css";
+import * as dat from "dat.gui";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
-import * as dat from "dat.gui";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(TextPlugin);
+
+const loader = new GLTFLoader();
+let ring: THREE.Group<THREE.Object3DEventMap> | null = null;
+let contactRotation = false;
+let renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.PerspectiveCamera;
 
 function initThreeJS() {
   /**
@@ -16,7 +23,7 @@ function initThreeJS() {
   gui.hide();
 
   /**
-   * Dubugging
+   * Sizes
    */
   const sizes = {
     width: window.innerWidth,
@@ -24,9 +31,8 @@ function initThreeJS() {
   };
 
   const canvas = document.querySelector("canvas.webgl");
-  const scene = new THREE.Scene();
-
-  const camera = new THREE.PerspectiveCamera(
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
     75,
     sizes.width / sizes.height,
     0.1,
@@ -35,7 +41,18 @@ function initThreeJS() {
   camera.position.z = 2;
   scene.add(camera);
 
-  const renderer = new THREE.WebGLRenderer({
+  const directionalLight = new THREE.DirectionalLight("lightblue", 10);
+  directionalLight.position.z = 8;
+  scene.add(directionalLight);
+
+  loader.load("ring.glb", (gltf) => {
+    ring = gltf.scene;
+    ring.position.set(0, 0, 0);
+    ring.scale.set(0.5, 0.5, 0.5);
+    scene.add(ring);
+  });
+
+  renderer = new THREE.WebGLRenderer({
     canvas: canvas!!,
     alpha: true,
     antialias: true,
@@ -55,6 +72,32 @@ function initThreeJS() {
   });
 }
 
+function initRenderLoop() {
+  const clock = new THREE.Clock();
+
+  const tick = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    if (ring) {
+      if (!contactRotation) {
+        ring.rotation.y = 0.5 * elapsedTime;
+        ring.rotation.x = 0;
+        ring.rotation.z = 0;
+      } else {
+        ring.rotation.y = 0;
+        ring.rotation.x = 0.2 * elapsedTime;
+        ring.rotation.z = 0.2 * elapsedTime;
+      }
+    }
+
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(tick);
+  };
+
+  tick();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initThreeJS();
+  initRenderLoop();
 });
