@@ -50,6 +50,32 @@ function initThreeJS() {
     ring.position.set(0, 0, 0);
     ring.scale.set(0.5, 0.5, 0.5);
     scene.add(ring);
+
+    const animate = gsap.timeline({
+      scrollTrigger: {
+        trigger: "section.details",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      },
+      defaults: {
+        ease: "power3.inOut",
+        duration: 3,
+      },
+    });
+
+    animate
+      .to(ring.position, {
+        z: 2.5,
+        y: -0.34,
+      })
+      .to(
+        ring.rotation,
+        {
+          z: 1,
+        },
+        "<"
+      );
   });
 
   renderer = new THREE.WebGLRenderer({
