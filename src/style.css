@@ -158,6 +158,12 @@ section {
 
 .marquee {
   overflow: hidden;
+
+  p {
+    font-size: 16rem;
+    font-weight: bold;
+    color: whitesmoke;
+  }
 }
 
 /**

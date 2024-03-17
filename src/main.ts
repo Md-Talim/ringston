@@ -131,6 +131,41 @@ function animateWords() {
   setInterval(updateText, 3000);
 }
 
+function animateInspectionSection() {
+  const animate = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".inspection",
+      start: "top bottom",
+      end: "bottom top",
+      markers: true,
+      scrub: true,
+    },
+  });
+
+  animate
+    .to(".inspection h2", {
+      y: -100,
+    })
+    .to(
+      ".ring-bg",
+      {
+        y: -50,
+        height: 300,
+      },
+      "<"
+    );
+
+  gsap.to(".marquee p", {
+    scrollTrigger: {
+      trigger: ".marquee p",
+      start: "top 80%",
+      end: "bottom top",
+      scrub: true,
+    },
+    x: 200,
+  });
+}
+
 function initRenderLoop() {
   const clock = new THREE.Clock();
 
@@ -159,5 +194,7 @@ function initRenderLoop() {
 document.addEventListener("DOMContentLoaded", () => {
   initThreeJS();
   initRenderLoop();
+
   animateWords();
+  animateInspectionSection();
 });
