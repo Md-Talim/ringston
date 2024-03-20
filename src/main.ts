@@ -2,7 +2,7 @@ import * as dat from "dat.gui";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
-import SplitType from "split-type";
+import SplitType, { TargetElement } from "split-type";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
@@ -137,7 +137,6 @@ function animateInspectionSection() {
       trigger: ".inspection",
       start: "top bottom",
       end: "bottom top",
-      markers: true,
       scrub: true,
     },
   });
@@ -163,6 +162,66 @@ function animateInspectionSection() {
       scrub: true,
     },
     x: 200,
+  });
+}
+
+function animateSliderSection() {
+  const matchMedia = gsap.matchMedia();
+
+  matchMedia.add("(min-width: 768px)", () => {
+    const slider = document.querySelector(".slider");
+    const slides: Element[] = gsap.utils.toArray(".slide");
+
+    if (!slider) {
+      return;
+    }
+    const animateSlider = gsap.timeline({
+      defaults: {
+        ease: "none",
+      },
+      scrollTrigger: {
+        trigger: slider,
+        pin: true,
+        scrub: 1,
+        end: () => "+=" + slider.offsetWidth,
+      },
+    });
+
+    animateSlider
+      .to(
+        slider,
+        {
+          xPercent: -66,
+        },
+        "<"
+      )
+      .to(
+        ".progress",
+        {
+          width: "100%",
+        },
+        "<"
+      );
+
+    slides.forEach((slide) => {
+      const paragraph = slide.querySelector(".slide-p");
+      const slideText = new SplitType(paragraph as TargetElement, {
+        types: "chars",
+      });
+
+      animateSlider.from(slideText.chars, {
+        opacity: 0,
+        y: 10,
+        stagger: 0.03,
+        scrollTrigger: {
+          trigger: paragraph,
+          start: "top bottom",
+          end: "bottom center",
+          containerAnimation: animateSlider,
+          scrub: true,
+        },
+      });
+    });
   });
 }
 
@@ -197,4 +256,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   animateWords();
   animateInspectionSection();
+  animateSliderSection();
 });
