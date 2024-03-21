@@ -79,6 +79,19 @@ function initThreeJS() {
         },
         "<"
       );
+
+    const contactSectionTimeline = gsap.timeline({
+      scrollTrigger: "section.contact",
+      start: "top 80%",
+      end: "bottom center",
+      scrub: true,
+    });
+
+    contactSectionTimeline.to(ring.position, {
+      z: 0.3,
+      x: 0.4,
+      y: -0.23,
+    });
   });
 
   renderer = new THREE.WebGLRenderer({
