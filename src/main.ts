@@ -225,6 +225,33 @@ function animateSliderSection() {
   });
 }
 
+function animateContactSection() {
+  gsap.set("h4, .inner-contact span", {
+    yPercent: 100,
+  });
+  gsap.set(".contact-desc", {
+    opacity: 0,
+  });
+
+  const animateTimeline = gsap.timeline({
+    scrollTrigger: ".inner-contact",
+    start: "-20% center",
+    end: "10% 40%",
+    scrub: true,
+  });
+
+  animateTimeline
+    .to(".line-top, .line-bottom", {
+      width: "100%",
+    })
+    .to("h4, .inner-contact span", {
+      yPercent: 0,
+    })
+    .to(".contact-desc", {
+      opacity: 1,
+    });
+}
+
 function initRenderLoop() {
   const clock = new THREE.Clock();
 
@@ -257,4 +284,5 @@ document.addEventListener("DOMContentLoaded", () => {
   animateWords();
   animateInspectionSection();
   animateSliderSection();
+  animateContactSection();
 });
