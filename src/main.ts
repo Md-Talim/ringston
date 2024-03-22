@@ -114,6 +114,55 @@ function initThreeJS() {
   });
 }
 
+/**
+ * Preloading
+ */
+function preloadFile(url: string) {
+  return new Promise((resolve, reject) => {
+    const imageFileTypes = ["jpg", "png", "gig"];
+    const videoFileTypes = ["mp4", "webm"];
+    const fileType = url.split(".").pop()?.toLowerCase();
+
+    if (imageFileTypes.includes(fileType!)) {
+      /**
+       * Preloading images
+       */
+      const image = new Image();
+      image.src = url;
+      image.onload = resolve;
+      image.onerror = reject;
+    } else if (videoFileTypes.includes(fileType!)) {
+      /**
+       * Preloading videos
+       */
+      const video = document.createElement("video");
+      video.src = url;
+      video.onloadeddata = resolve;
+      video.onerror = reject;
+    } else {
+      /**
+       * Preload other files like GLB
+       */
+      fetch(url)
+        .then((response) => response.blob())
+        .then(resolve)
+        .then(reject);
+    }
+  });
+}
+
+function preloadFiles(urls: string[]) {
+  const promises = urls.map((url) => preloadFile(url));
+
+  Promise.all(promises)
+    .then(() => {
+      console.log("All files preloaded...");
+      // Hide loading screen and show the UI
+      document.querySelector(".loading-screen")?.classList.add("hide-loader");
+    })
+    .catch((error) => console.error("Error preloading files:", error));
+}
+
 function animateWords() {
   const words = ["Relationships", "Romance", "Rings"];
   let index = 0;
@@ -291,6 +340,14 @@ function initRenderLoop() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  preloadFiles([
+    "ring.glb",
+    "ring.mp4",
+    "images/rings.jpg",
+    "images/slide1.jpg",
+    "images/slide2.jpg",
+    "images/slide3.jpg",
+  ]);
   initThreeJS();
   initRenderLoop();
 
