@@ -1,3 +1,4 @@
+import Lenis from "@studio-freight/lenis/types";
 import * as dat from "dat.gui";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -15,6 +16,22 @@ let contactRotation = false;
 let renderer: THREE.WebGLRenderer,
   scene: THREE.Scene,
   camera: THREE.PerspectiveCamera;
+
+/**
+ * Initialize smooth scroll with lenis
+ */
+function initSmoothScroll() {
+  const lenis = new Lenis();
+
+  function raf(time: DOMHighResTimeStamp) {
+    lenis.raf(time);
+
+    requestAnimationFrame(raf);
+  }
+
+  // Start with the current high-resolution time
+  raf(performance.now());
+}
 
 function initThreeJS() {
   /**
@@ -348,6 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "images/slide2.jpg",
     "images/slide3.jpg",
   ]);
+  initSmoothScroll();
   initThreeJS();
   initRenderLoop();
 
