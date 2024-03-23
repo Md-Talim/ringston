@@ -231,7 +231,7 @@ function animateSliderSection() {
   const matchMedia = gsap.matchMedia();
 
   matchMedia.add("(min-width: 768px)", () => {
-    const slider = document.querySelector(".slider");
+    const slider: HTMLElement | null = document.querySelector(".slider");
     const slides: Element[] = gsap.utils.toArray(".slide");
 
     if (!slider) {
