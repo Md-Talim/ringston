@@ -365,7 +365,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "images/slide2.jpg",
     "images/slide3.jpg",
   ]);
-  initSmoothScroll();
   initThreeJS();
   initRenderLoop();
 
@@ -373,4 +372,5 @@ document.addEventListener("DOMContentLoaded", () => {
   animateInspectionSection();
   animateSliderSection();
   animateContactSection();
+  initSmoothScroll();
 });
