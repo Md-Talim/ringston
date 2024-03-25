@@ -1,4 +1,4 @@
-import Lenis from "@studio-freight/lenis/types";
+import Lenis from "@studio-freight/lenis";
 import * as dat from "dat.gui";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -23,14 +23,13 @@ let renderer: THREE.WebGLRenderer,
 function initSmoothScroll() {
   const lenis = new Lenis();
 
-  function raf(time: DOMHighResTimeStamp) {
-    lenis.raf(time);
+  lenis.on("scroll", ScrollTrigger.update);
 
-    requestAnimationFrame(raf);
-  }
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
 
-  // Start with the current high-resolution time
-  raf(performance.now());
+  gsap.ticker.lagSmoothing(0);
 }
 
 function initThreeJS() {
