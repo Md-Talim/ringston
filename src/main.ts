@@ -1,5 +1,4 @@
 import Lenis from "@studio-freight/lenis";
-import * as dat from "dat.gui";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
@@ -33,12 +32,6 @@ function initSmoothScroll() {
 }
 
 function initThreeJS() {
-  /**
-   * Dubugging
-   */
-  const gui = new dat.GUI();
-  gui.hide();
-
   /**
    * Window's size object
    * @defaultValue `width` - `window.innerWidth`
